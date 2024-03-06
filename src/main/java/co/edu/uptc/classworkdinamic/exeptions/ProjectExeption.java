@@ -1,13 +1,19 @@
 package co.edu.uptc.classworkdinamic.exeptions;
 
 public class ProjectExeption extends Exception {
-private int code;
+private TypeMessage typeMessage;
 
-    public ProjectExeption(int code, String message) {
-        super(message);
-        this.code = code;        
+    public ProjectExeption(TypeMessage typeMessage) {
+        super(typeMessage.message);
+        this.typeMessage = typeMessage;        
     }
     
 
+    public Mensaje getMenssage(){
+        return new Mensaje(this.typeMessage.code,
+         this.typeMessage.message, 
+         this.typeMessage.codeHttp);
+            
+    }
     
 }
