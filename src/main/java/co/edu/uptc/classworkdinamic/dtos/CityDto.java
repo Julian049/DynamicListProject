@@ -1,9 +1,8 @@
 package co.edu.uptc.classworkdinamic.dtos;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import co.edu.uptc.classworkdinamic.models.City;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,14 +26,6 @@ public class CityDto {
         city.setName(cityDto.getName());
         return city;
     }
-
-    public static List<CityDto> fromCities(List<City> cities) {
-        List<CityDto> cityDtos = new ArrayList<>();
-        for (City city : cities) {
-            cityDtos.add(fromCity(city));
-        }
-        return cityDtos;
-    }
-
+    
 
 }

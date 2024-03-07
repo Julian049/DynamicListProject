@@ -14,6 +14,6 @@ public class Person {
     private String lastName;
     private String gender;
     private LocalDate birthDate;
-    private String city;
+    private City city;
     
 }

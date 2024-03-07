@@ -15,31 +15,37 @@ import co.edu.uptc.classworkdinamic.services.CityService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @RestController
 @RequestMapping("/city")
 public class CityController {
     CityService service = new CityService();
-    
+
     @GetMapping()
     public ResponseEntity<Object> getCities() {
-          List<City> cities = service.getCities();
-
-        return ResponseEntity.ok(CityDto.fromCities(cities));
-    }@PostMapping()
-    public ResponseEntity<Object> postCity(@RequestBody CityDto cityDto) {
-        
+        List<City> cities;
         try {
-            service.add(CityDto.fromCityDto(cityDto));
-            return ResponseEntity.status(HttpStatus.OK).body(cityDto);
+            cities = service.getCities();
+            return ResponseEntity.status(HttpStatus.OK).body(cities);
+                //CityDto.fromCities(cities));
         } catch (ProjectExeption e) {
-          
             return ResponseEntity.status(e.getMenssage().getCodeHttp())
             .body(e.getMenssage());
         }
-    
+
+        //return ResponseEntity.ok(CityDto.fromCities(cities));
     }
-    
+
+    @PostMapping()
+    public ResponseEntity<Object> postCity(@RequestBody CityDto cityDto1) {
+
+   //     try {
+         //   service.addcity(CityDto.fromCityDto(cityDto));
+            return ResponseEntity.status(HttpStatus.OK).body(cityDto1);
+     //   } catch (ProjectExeption e) {
+          //  return ResponseEntity.status(e.getMenssage().getCodeHttp())
+            //        .body(e.getMenssage());
+       // }
+    }
 
 
 

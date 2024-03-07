@@ -7,6 +7,7 @@ import java.util.List;
 import ch.qos.logback.core.model.processor.ProcessorException;
 import co.edu.uptc.classworkdinamic.exeptions.ProjectExeption;
 import co.edu.uptc.classworkdinamic.exeptions.TypeMessage;
+import co.edu.uptc.classworkdinamic.models.City;
 import co.edu.uptc.classworkdinamic.models.Person;
 import co.edu.uptc.classworkdinamic.utils.DateUtil;
 import lombok.Getter;
@@ -22,7 +23,7 @@ public class PersonDto {
     private String gender;
     private LocalDate birthDate;
     private int age;
-    private String city;
+    private City city;
 
 
     public static PersonDto fromPerson(Person person) {

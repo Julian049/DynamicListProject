@@ -2,7 +2,6 @@ package co.edu.uptc.classworkdinamic.services;
 
 import java.util.Comparator;
 
-import co.edu.uptc.classworkdinamic.dtos.PersonDto;
 import co.edu.uptc.classworkdinamic.models.Person;
 
 public class ComparatorService {

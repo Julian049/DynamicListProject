@@ -1,48 +1,77 @@
 package co.edu.uptc.classworkdinamic.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import co.edu.uptc.classworkdinamic.dtos.CityDto;
+
 import co.edu.uptc.classworkdinamic.exeptions.ProjectExeption;
 import co.edu.uptc.classworkdinamic.exeptions.TypeMessage;
 import co.edu.uptc.classworkdinamic.models.City;
+import co.edu.uptc.services.SimpleLIst;
+import co.edu.uptc.services.managerFileService.ManagerInFileTxtService;
+import co.edu.uptc.services.managerFileService.ManagerOutFileTxtService;
 
 public class CityService {
-    List <City> cities = new ArrayList<City>();
+  
 
-        public CityService(){
-            createCities();
+    public List<City> getCities() throws ProjectExeption{
+        ManagerInFileTxtService managerInFileTxtService = new ManagerInFileTxtService();
+        managerInFileTxtService.setFileName("city.txt");
+        List<String> citiesTxt = new SimpleLIst<String>();
+        List<City> cities = new SimpleLIst<City>();
+        try {
+            citiesTxt = managerInFileTxtService.getInfoStrings();
+            for (String string : citiesTxt) {
+                String[] parts = string.split(",");
+                City city = new City();
+                city.setCodeDane(parts[0]);
+                city.setName(parts[1]);
+                cities.add(city);
+            }
+        } catch (Exception e) {
+            throw new ProjectExeption(TypeMessage.NOT_FOUND_FILE);
         }
 
-    public void createCities(){
-        City city = new City();
-        city.setCodeDane("11001");
-        city.setName("BOGOTA");
-        cities.add(city);
-
-        city = new City();
-        city.setCodeDane("15001");
-        city.setName("TUNJA");
-        cities.add(city);
-
-        city = new City();
-        city.setCodeDane("13001");
-        city.setName("CARTAGENA");
-        cities.add(city);
-    }
-
-
-    public List<City> getCities(){
         return cities;
     }
 
-    public void add(City city) throws ProjectExeption {
-        if (cities.size() < 5) {
-            cities.add(city);     
-        } else {
-            throw new ProjectExeption(TypeMessage.NOT_SAVED);
+
+  public void addcity(City city) throws ProjectExeption {
+    ManagerOutFileTxtService managerOutFileTxtService = new ManagerOutFileTxtService();
+    managerOutFileTxtService.setFileName("city.txt");
+    try {
+      managerOutFileTxtService.saveInfoStrings(makeStringFromCity(city));
+    } catch (Exception e) {
+     throw new ProjectExeption(TypeMessage.NOT_FOUND_FILE);
+    }
+  }
+
+  
+  public String makeStringFromCity(City city) {
+    return city.getCodeDane() + "," + city.getName();
+    }
+
+
+    public City getCityByCodeDane(String codeDane) throws ProjectExeption {
+        ManagerInFileTxtService managerInFileTxtService = new ManagerInFileTxtService();
+        managerInFileTxtService.setFileName("city.txt");
+        List<String> citiesTxt = new SimpleLIst<String>();
+        try {
+            citiesTxt = managerInFileTxtService.getInfoStrings();
+            for (String string : citiesTxt) {
+                String[] parts = string.split(",");
+                City city = new City();
+                city.setCodeDane(parts[0]);
+                city.setName(parts[1]);
+                if (city.getCodeDane().equals(codeDane)) {
+                    return city;
+                }
+
+            }
         }
-       
+        catch (Exception e) {
+            throw new ProjectExeption(TypeMessage.NOT_FOUND_FILE);
+        }
+        return null;
+
     }
 }
