@@ -6,6 +6,7 @@ import java.util.List;
 import co.edu.uptc.classworkdinamic.exeptions.ProjectExeption;
 import co.edu.uptc.classworkdinamic.exeptions.TypeMessage;
 import co.edu.uptc.classworkdinamic.models.City;
+import co.edu.uptc.classworkdinamic.utils.Config;
 import co.edu.uptc.services.SimpleLIst;
 import co.edu.uptc.services.managerFileService.ManagerInFileTxtService;
 import co.edu.uptc.services.managerFileService.ManagerOutFileTxtService;
@@ -15,7 +16,7 @@ public class CityService {
 
     public List<City> getCities() throws ProjectExeption{
         ManagerInFileTxtService managerInFileTxtService = new ManagerInFileTxtService();
-        managerInFileTxtService.setFileName("city.txt");
+        managerInFileTxtService.setFileName(Config.getCityPath());
         List<String> citiesTxt = new SimpleLIst<String>();
         List<City> cities = new SimpleLIst<City>();
         try {
@@ -37,7 +38,7 @@ public class CityService {
 
   public void addcity(City city) throws ProjectExeption {
     ManagerOutFileTxtService managerOutFileTxtService = new ManagerOutFileTxtService();
-    managerOutFileTxtService.setFileName("city.txt");
+    managerOutFileTxtService.setFileName(Config.getCityPath());
     try {
       managerOutFileTxtService.saveInfoStrings(makeStringFromCity(city));
     } catch (Exception e) {
@@ -53,7 +54,7 @@ public class CityService {
 
     public City getCityByCodeDane(String codeDane) throws ProjectExeption {
         ManagerInFileTxtService managerInFileTxtService = new ManagerInFileTxtService();
-        managerInFileTxtService.setFileName("city.txt");
+        managerInFileTxtService.setFileName(Config.getCityPath());
         List<String> citiesTxt = new SimpleLIst<String>();
         try {
             citiesTxt = managerInFileTxtService.getInfoStrings();

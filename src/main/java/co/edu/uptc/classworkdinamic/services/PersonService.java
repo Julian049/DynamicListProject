@@ -7,6 +7,7 @@ import java.util.List;
 import co.edu.uptc.classworkdinamic.exeptions.ProjectExeption;
 import co.edu.uptc.classworkdinamic.exeptions.TypeMessage;
 import co.edu.uptc.classworkdinamic.models.Person;
+import co.edu.uptc.classworkdinamic.utils.Config;
 import co.edu.uptc.classworkdinamic.utils.DateUtil;
 import co.edu.uptc.services.SimpleLIst;
 import co.edu.uptc.services.managerFileService.ManagerInFileTxtService;
@@ -64,7 +65,7 @@ public class PersonService {
 
   public void addPerson(Person person) throws ProjectExeption {
     ManagerOutFileTxtService managerOutFileTxtService = new ManagerOutFileTxtService();
-    managerOutFileTxtService.setFileName("people.txt");
+    managerOutFileTxtService.setFileName(Config.getPeoplePath());
     try {
       managerOutFileTxtService.saveInfoStrings(makeStringFromPerson(person));
     } catch (Exception e) {
@@ -87,7 +88,7 @@ public class PersonService {
     CityService cityService = new CityService();
     List<Person> people = new SimpleLIst<Person>();
     ManagerInFileTxtService managerInFileTxtService = new ManagerInFileTxtService();
-    managerInFileTxtService.setFileName("people.txt");
+    managerInFileTxtService.setFileName(Config.getPeoplePath());
     try {
       List<String> pp = managerInFileTxtService.getInfoStrings();
       for (String string : pp) {
