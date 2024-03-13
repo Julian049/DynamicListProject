@@ -9,7 +9,8 @@ import co.edu.uptc.classworkdinamic.exeptions.TypeMessage;
 import co.edu.uptc.classworkdinamic.models.Person;
 import co.edu.uptc.classworkdinamic.utils.Config;
 import co.edu.uptc.classworkdinamic.utils.DateUtil;
-import co.edu.uptc.services.SimpleLIst;
+
+import co.edu.uptc.services.dynamic.UptcList;
 import co.edu.uptc.services.managerFileService.ManagerInFileTxtService;
 import co.edu.uptc.services.managerFileService.ManagerOutFileTxtService;
 
@@ -34,7 +35,7 @@ public class PersonService {
   }
 
   public List<Person> getOver18(List<Person> people) {
-    List<Person> peopleAux = new SimpleLIst<Person>();
+    List<Person> peopleAux = new UptcList<Person>();
     for (Person person : people) {
       if (DateUtil.getAge(person.getBirthDate()) >= 18) {
         peopleAux.add(person);
@@ -44,7 +45,7 @@ public class PersonService {
   }
 
   public List<Person> getPeopleGender(List<Person> people,String gender) {
-    List<Person> peopleAux = new SimpleLIst<Person>();
+    List<Person> peopleAux = new UptcList<Person>();
     for (Person person : people) {
       if (person.getGender().equals(gender)) {
         peopleAux.add(person);
@@ -54,7 +55,7 @@ public class PersonService {
   }
 
   public List<Person> getPeopleCityByName(List<Person> people,String nameCity) {
-    List<Person> peopleAux = new SimpleLIst<Person>();
+    List<Person> peopleAux = new UptcList<Person>();
     for (Person person : people) {
       if (person.getCity().getName().equals(nameCity)) {
         peopleAux.add(person);
@@ -86,7 +87,7 @@ public class PersonService {
 
   public List<Person> getPeople() throws ProjectExeption{
     CityService cityService = new CityService();
-    List<Person> people = new SimpleLIst<Person>();
+    List<Person> people = new UptcList<Person>();
     ManagerInFileTxtService managerInFileTxtService = new ManagerInFileTxtService();
     managerInFileTxtService.setFileName(Config.getPeoplePath());
     try {

@@ -6,7 +6,7 @@ public class Config {
 
     private static ResourceBundle resourceBundle;
 
-    public void init() {
+    public Config() {
         resourceBundle = ResourceBundle.getBundle("main/resources/config");
     }
 
