@@ -1,85 +1,67 @@
 package co.edu.uptc.classworkdinamic.services;
 
-import java.io.ObjectInputFilter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 
 import co.edu.uptc.classworkdinamic.exeptions.ProjectExeption;
 import co.edu.uptc.classworkdinamic.exeptions.TypeMessage;
-import co.edu.uptc.classworkdinamic.models.City;
 import co.edu.uptc.classworkdinamic.utils.Config;
-import co.edu.uptc.services.managerFileService.ManagerInFileTxtService;
-import co.edu.uptc.services.managerFileService.ManagerOutFileTxtService;
+import co.edu.uptc.classworkdinamic.models.City;
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
+import org.springframework.web.bind.annotation.PathVariable;
 
 public class CityService {
 
-    private Config config;
-
-    public CityService(){
-        config = new Config();
-    }
-  
-
     public List<City> getCities() throws ProjectExeption{
-        ManagerInFileTxtService managerInFileTxtService = new ManagerInFileTxtService();
-        managerInFileTxtService.setFileName(config.getCityPath());
-        List<String> citiesTxt = new ArrayList<String>();
-        List<City> cities = new ArrayList<City>();
-        try {
-            citiesTxt = managerInFileTxtService.getInfoStrings();
-            for (String string : citiesTxt) {
-                String[] parts = string.split(",");
-                City city = new City();
-                city.setCodeDane(parts[0]);
-                city.setName(parts[1]);
+        Config config = new Config();
+
+            ArrayList<City> cities = new ArrayList<>();
+            JsonReader reader = null;
+            try {
+                reader = new JsonReader(new FileReader(config.getCityPath()));
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
+            Gson gson = new Gson();
+
+            City[] citiesAux = gson.fromJson(reader, City[].class);
+            for (City city : citiesAux) {
                 cities.add(city);
             }
-        } catch (Exception e) {
-            throw new ProjectExeption(TypeMessage.NOT_FOUND_FILE);
-        }
+            return cities;
 
-        return cities;
     }
 
 
   public void addcity(City city) throws ProjectExeption {
-    ManagerOutFileTxtService managerOutFileTxtService = new ManagerOutFileTxtService();
-    managerOutFileTxtService.setFileName(config.getCityPath());
-    try {
-      managerOutFileTxtService.saveInfoStrings(makeStringFromCity(city));
-    } catch (Exception e) {
-     throw new ProjectExeption(TypeMessage.NOT_FOUND_FILE);
-    }
+      Config config = new Config();
+      Gson gson = new Gson();
+      List<City> cities = getCities();
+      cities.add(city);
+      String json = gson.toJson(cities);
+      try {
+          PrintWriter writer = new PrintWriter(config.getCityPath());
+          writer.write(json);
+          writer.close();
+      } catch (IOException e) {
+          throw new RuntimeException(e);
+      }
   }
 
-  
-  public String makeStringFromCity(City city) {
-    return city.getCodeDane() + "," + city.getName();
-    }
-
-
     public City getCityByCodeDane(String codeDane) throws ProjectExeption {
-        ManagerInFileTxtService managerInFileTxtService = new ManagerInFileTxtService();
-        managerInFileTxtService.setFileName(config.getCityPath());
-        List<String> citiesTxt = new ArrayList<String>();
-        try {
-            citiesTxt = managerInFileTxtService.getInfoStrings();
-            for (String string : citiesTxt) {
-                String[] parts = string.split(",");
-                City city = new City();
-                city.setCodeDane(parts[0]);
-                city.setName(parts[1]);
+            List<City> cities = this.getCities();
+            for (City city : cities) {
                 if (city.getCodeDane().equals(codeDane)) {
                     return city;
                 }
-
             }
-        }
-        catch (Exception e) {
-            throw new ProjectExeption(TypeMessage.NOT_FOUND_FILE);
-        }
-        return null;
-
+            return null;
     }
 }

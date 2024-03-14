@@ -26,10 +26,10 @@ public class CityController {
         try {
             cities = service.getCities();
             return ResponseEntity.status(HttpStatus.OK).body(cities);
-                //CityDto.fromCities(cities));
+            //CityDto.fromCities(cities));
         } catch (ProjectExeption e) {
             return ResponseEntity.status(e.getMenssage().getCodeHttp())
-            .body(e.getMenssage());
+                    .body(e.getMenssage());
         }
 
         //return ResponseEntity.ok(CityDto.fromCities(cities));
@@ -38,15 +38,19 @@ public class CityController {
     @PostMapping()
     public ResponseEntity<Object> postCity(@RequestBody CityDto cityDto1) {
 
-   //     try {
-         //   service.addcity(CityDto.fromCityDto(cityDto));
-            return ResponseEntity.status(HttpStatus.OK).body(cityDto1);
-     //   } catch (ProjectExeption e) {
-          //  return ResponseEntity.status(e.getMenssage().getCodeHttp())
-            //        .body(e.getMenssage());
-       // }
+        //     try {
+        try {
+            service.addcity(CityDto.fromCityDto(cityDto1));
+        } catch (ProjectExeption e) {
+            return ResponseEntity.status(e.getMenssage().getCodeHttp())
+                    .body(e.getMenssage());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(cityDto1);
+        //   } catch (ProjectExeption e) {
+        //  return ResponseEntity.status(e.getMenssage().getCodeHttp())
+        //        .body(e.getMenssage());
+        // }
     }
-
 
 
 }

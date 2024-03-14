@@ -6,6 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class City {
-    private String name;
+
     private String codeDane;
+    private String name;
+
 }

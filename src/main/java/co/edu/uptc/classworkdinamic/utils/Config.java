@@ -1,21 +1,21 @@
 package co.edu.uptc.classworkdinamic.utils;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.FileInputStream;
 import java.util.Properties;
 
 public class Config {
 
-    private Properties properties;
+    private Properties properties = new Properties();;
 
     public Config() {
-        properties = new Properties();
         loadProperties();
     }
 
     private void loadProperties() {
-        try (InputStream inputStream = getClass().getResourceAsStream("main/resources/config.properties")) {
-            properties.load(inputStream);
+        try {
+            properties.load(new FileInputStream("src/main/resources/config.properties"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -26,6 +26,26 @@ public class Config {
     }
 
     public String getPeoplePath() {
-        return properties.getProperty("personPath");
+        return properties.getProperty("peoplePath");
+    }
+
+    public String getNotFoundMessage(){
+        return properties.getProperty("notFoundMessage");
+    }
+
+    public String getNotSavedMessage(){
+        return properties.getProperty("notSavedMessage");
+    }
+
+    public String getInformationIncomplete(){
+        return properties.getProperty("informationIncomplete");
+    }
+
+    public String getFileNotFoundMessage(){
+        return properties.getProperty("fileNotFoundMessage");
+    }
+
+    public String getSavedMessage(){
+        return properties.getProperty("savedMessage");
     }
 }

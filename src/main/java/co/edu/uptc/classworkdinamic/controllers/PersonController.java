@@ -124,8 +124,6 @@ public class PersonController {
     }
 
 
-
-
     @PostMapping()
     public ResponseEntity<Object> addPerson(@RequestBody PersonDto personDto) {
         try {
