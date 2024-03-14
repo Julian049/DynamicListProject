@@ -1,6 +1,7 @@
 package co.edu.uptc.classworkdinamic.services;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,13 +10,16 @@ import co.edu.uptc.classworkdinamic.exeptions.TypeMessage;
 import co.edu.uptc.classworkdinamic.models.Person;
 import co.edu.uptc.classworkdinamic.utils.Config;
 import co.edu.uptc.classworkdinamic.utils.DateUtil;
-
-import co.edu.uptc.services.dynamic.UptcList;
 import co.edu.uptc.services.managerFileService.ManagerInFileTxtService;
 import co.edu.uptc.services.managerFileService.ManagerOutFileTxtService;
 
 public class PersonService {
-  
+
+  private Config config;
+
+  public PersonService(){
+    config = new Config();
+  }
 
   public List<Person> orderName(List<Person> peopleAux) {
     Collections.sort(peopleAux, ComparatorService.personNameComparator());
@@ -35,7 +39,7 @@ public class PersonService {
   }
 
   public List<Person> getOver18(List<Person> people) {
-    List<Person> peopleAux = new UptcList<Person>();
+    List<Person> peopleAux = new ArrayList<Person>();
     for (Person person : people) {
       if (DateUtil.getAge(person.getBirthDate()) >= 18) {
         peopleAux.add(person);
@@ -45,7 +49,7 @@ public class PersonService {
   }
 
   public List<Person> getPeopleGender(List<Person> people,String gender) {
-    List<Person> peopleAux = new UptcList<Person>();
+    List<Person> peopleAux = new ArrayList<Person>();
     for (Person person : people) {
       if (person.getGender().equals(gender)) {
         peopleAux.add(person);
@@ -55,7 +59,7 @@ public class PersonService {
   }
 
   public List<Person> getPeopleCityByName(List<Person> people,String nameCity) {
-    List<Person> peopleAux = new UptcList<Person>();
+    List<Person> peopleAux = new ArrayList<Person>();
     for (Person person : people) {
       if (person.getCity().getName().equals(nameCity)) {
         peopleAux.add(person);
@@ -66,7 +70,7 @@ public class PersonService {
 
   public void addPerson(Person person) throws ProjectExeption {
     ManagerOutFileTxtService managerOutFileTxtService = new ManagerOutFileTxtService();
-    managerOutFileTxtService.setFileName(Config.getPeoplePath());
+    managerOutFileTxtService.setFileName(config.getPeoplePath());
     try {
       managerOutFileTxtService.saveInfoStrings(makeStringFromPerson(person));
     } catch (Exception e) {
@@ -87,9 +91,9 @@ public class PersonService {
 
   public List<Person> getPeople() throws ProjectExeption{
     CityService cityService = new CityService();
-    List<Person> people = new UptcList<Person>();
+    List<Person> people = new ArrayList<Person>();
     ManagerInFileTxtService managerInFileTxtService = new ManagerInFileTxtService();
-    managerInFileTxtService.setFileName(Config.getPeoplePath());
+    managerInFileTxtService.setFileName(config.getPeoplePath());
     try {
       List<String> pp = managerInFileTxtService.getInfoStrings();
       for (String string : pp) {

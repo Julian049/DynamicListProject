@@ -48,12 +48,11 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
 		<dependency>
-			<groupId>co.edu.uptc</groupId>
-			<artifactId>prog2</artifactId>
-			<version>2.0.0</version>
-			<scope>system</scope>
-			<systemPath>C:\Users\germa\OneDrive\Documents\programming\program3\libs\manager_file_v2.0.0.jar</systemPath>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.9</version>
 		</dependency>
 
 		<dependency>
@@ -61,9 +60,8 @@
 			<artifactId>list</artifactId>
 			<version>2.0.0</version>
 			<scope>system</scope>
-			<systemPath>C:\Users\germa\OneDrive\Documents\programming\program3\libs\simplelistuptc.V1.0.0.jar</systemPath>
+			<systemPath>C:\Users\Julian\Documents\Universidad\Cuarto Semestre\Programacion III\finalLibrary17.jar</systemPath>
 		</dependency>
-
 
 	</dependencies>
 

@@ -1,20 +1,31 @@
 package co.edu.uptc.classworkdinamic.utils;
 
-import java.util.ResourceBundle;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class Config {
 
-    private static ResourceBundle resourceBundle;
+    private Properties properties;
 
     public Config() {
-        resourceBundle = ResourceBundle.getBundle("main/resources/config");
+        properties = new Properties();
+        loadProperties();
     }
 
-    public static String getCityPath(){
-        return resourceBundle.getString("cityPath");
+    private void loadProperties() {
+        try (InputStream inputStream = getClass().getResourceAsStream("main/resources/config.properties")) {
+            properties.load(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static String getPeoplePath(){
-        return resourceBundle.getString("peoplePath");
+    public String getCityPath() {
+        return properties.getProperty("cityPath");
+    }
+
+    public String getPeoplePath() {
+        return properties.getProperty("personPath");
     }
 }
