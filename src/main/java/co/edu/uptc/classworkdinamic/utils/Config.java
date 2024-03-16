@@ -29,23 +29,4 @@ public class Config {
         return properties.getProperty("peoplePath");
     }
 
-    public String getNotFoundMessage(){
-        return properties.getProperty("notFoundMessage");
-    }
-
-    public String getNotSavedMessage(){
-        return properties.getProperty("notSavedMessage");
-    }
-
-    public String getInformationIncomplete(){
-        return properties.getProperty("informationIncomplete");
-    }
-
-    public String getFileNotFoundMessage(){
-        return properties.getProperty("fileNotFoundMessage");
-    }
-
-    public String getSavedMessage(){
-        return properties.getProperty("savedMessage");
-    }
 }

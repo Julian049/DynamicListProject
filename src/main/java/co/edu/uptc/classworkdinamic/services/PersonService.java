@@ -1,9 +1,6 @@
 package co.edu.uptc.classworkdinamic.services;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,19 +8,12 @@ import java.util.List;
 
 import co.edu.uptc.classworkdinamic.exeptions.ProjectExeption;
 import co.edu.uptc.classworkdinamic.exeptions.TypeMessage;
-import co.edu.uptc.classworkdinamic.models.City;
 import co.edu.uptc.classworkdinamic.models.Person;
 import co.edu.uptc.classworkdinamic.utils.Config;
 import co.edu.uptc.classworkdinamic.utils.DateUtil;
-import co.edu.uptc.classworkdinamic.utils.LocalDateSerializer;
-import co.edu.uptc.classworkdinamic.utils.LocalDateDeserializer;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.stream.JsonReader;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 public class PersonService {
+  
 
   public List<Person> orderName(List<Person> peopleAux) {
     Collections.sort(peopleAux, ComparatorService.personNameComparator());
@@ -65,56 +55,83 @@ public class PersonService {
   public List<Person> getPeopleCityByName(List<Person> people,String nameCity) {
     List<Person> peopleAux = new ArrayList<Person>();
     for (Person person : people) {
-      if (person.getCity().getName().equals(nameCity)) {
+      if (person.getCity() != null && person.getCity().getName().equals(nameCity)) {
         peopleAux.add(person);
       }
     }
     return peopleAux;
   }
 
-  public void addPerson(Person person) throws ProjectExeption{
-    Config config = new Config();
-    GsonBuilder gsonBuilder = new GsonBuilder();
-    gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateSerializer());
-    gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
-
-    Gson gson = gsonBuilder.setPrettyPrinting().create();
-
-    List<Person> people = getPeople();
-    people.add(person);
-    String json = gson.toJson(people);
+  public void addPerson(Person person) throws ProjectExeption {
     try {
-      PrintWriter writer = new PrintWriter(config.getPeoplePath());
-      writer.write(json);
-      writer.close();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+      List<String> pp = this.loadFile();
+        pp.add(makeStringFromPerson(person));
+      this.saveFile(pp);
+    } catch (Exception e) {
+     throw new ProjectExeption(TypeMessage.NOT_FOUND_FILE);
     }
   }
 
-  public List<Person> getPeople() throws ProjectExeption {
-    Config config = new Config();
-    ArrayList<Person> people = new ArrayList<>();
-    JsonReader reader = null;
+  public String makeStringFromPerson(Person person) {
+    return person.getTypeDocument() + "," +
+        person.getNumerDocument() + "," +
+        person.getName() + "," +
+        person.getLastName() + "," +
+        person.getGender() + ","
+        + person.getCity().getCodeDane() + ","
+        + person.getBirthDate();
+  }
+
+
+  public List<Person> getPeople() throws ProjectExeption{
+    CityService cityService = new CityService();
+    List<Person> people = new ArrayList<Person>();
     try {
-      reader = new JsonReader(new FileReader(config.getPeoplePath()));
-    } catch (FileNotFoundException e) {
-      throw new RuntimeException(e);
-    }
-
-    GsonBuilder gsonBuilder = new GsonBuilder();
-    gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateSerializer());
-    gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
-
-    Gson gson = gsonBuilder.setPrettyPrinting().create();
-
-    Person[] peopleAux = gson.fromJson(reader, Person[].class);
-
-    for (Person person : peopleAux) {
-      people.add(person);
+      List<String> pp = this.loadFile();
+      for (String string : pp) {
+        String[] parts = string.split(","); 
+        Person person = new Person();
+        person.setTypeDocument(parts[0]);
+        person.setNumerDocument(parts[1]);
+        person.setName(parts[2]);
+        person.setLastName(parts[3]);
+        person.setGender(parts[4]);
+        person.setCity(cityService.getCityByCodeDane(parts[5]));
+        person.setBirthDate(LocalDate.parse(parts[6]));
+        people.add(person);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new ProjectExeption(TypeMessage.NOT_FOUND_FILE);
     }
     return people;
   }
 
+  public ArrayList<String> loadFile() throws IOException {
+    Config config = new Config();
+    ArrayList<String> lines = new ArrayList<>();
+    try (BufferedReader buffer = new BufferedReader(new FileReader(config.getPeoplePath()));) {
+      String line = "";
+      while ((line = buffer.readLine()) != null) {
+        lines.add(line);
+      }
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return lines;
+  }
 
+  public void saveFile(List<String> lines) throws IOException {
+    Config config = new Config();
+    try (BufferedWriter buffer = new BufferedWriter(new FileWriter(config.getPeoplePath()))) {
+      for (String line : lines) {
+        buffer.write(line);
+        buffer.write(System.lineSeparator());
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 }
