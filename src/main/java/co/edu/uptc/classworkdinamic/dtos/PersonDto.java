@@ -1,7 +1,6 @@
 package co.edu.uptc.classworkdinamic.dtos;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import ch.qos.logback.core.model.processor.ProcessorException;
@@ -10,6 +9,7 @@ import co.edu.uptc.classworkdinamic.exeptions.TypeMessage;
 import co.edu.uptc.classworkdinamic.models.City;
 import co.edu.uptc.classworkdinamic.models.Person;
 import co.edu.uptc.classworkdinamic.utils.DateUtil;
+import co.edu.uptc.services.dynamic.UptcList;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,7 +41,7 @@ public class PersonDto {
 
 
     public static List<PersonDto> fromPeople(List <Person> people) {
-        List <PersonDto> personDto = new ArrayList<PersonDto>();
+        List <PersonDto> personDto = new UptcList<PersonDto>();
         for (Person person : people) {
             personDto.add(PersonDto.fromPerson(person));
         }

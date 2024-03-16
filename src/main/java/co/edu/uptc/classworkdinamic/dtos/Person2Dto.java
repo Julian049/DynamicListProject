@@ -1,11 +1,11 @@
 package co.edu.uptc.classworkdinamic.dtos;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import co.edu.uptc.classworkdinamic.models.Person;
 import co.edu.uptc.classworkdinamic.utils.DateUtil;
+import co.edu.uptc.services.dynamic.UptcList;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,7 +27,7 @@ public class Person2Dto {
 
 
     public static List<Person2Dto> fromPeople(List <Person> people) {
-        List <Person2Dto> personDto = new ArrayList<Person2Dto>();
+        List <Person2Dto> personDto = new UptcList<>();
         for (Person person : people) {
             personDto.add(Person2Dto.fromPerson(person));
         }

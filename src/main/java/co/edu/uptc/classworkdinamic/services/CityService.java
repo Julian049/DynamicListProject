@@ -1,21 +1,22 @@
 package co.edu.uptc.classworkdinamic.services;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 
 
 import co.edu.uptc.classworkdinamic.exeptions.ProjectExeption;
 import co.edu.uptc.classworkdinamic.exeptions.TypeMessage;
 import co.edu.uptc.classworkdinamic.models.City;
+import co.edu.uptc.classworkdinamic.models.Person;
 import co.edu.uptc.classworkdinamic.utils.Config;
+import co.edu.uptc.services.dynamic.UptcList;
 
 public class CityService {
   
 
     public List<City> getCities() throws ProjectExeption{
-        List<String> citiesTxt = new ArrayList<String>();
-        List<City> cities = new ArrayList<City>();
+        List<String> citiesTxt = new UptcList<String>();
+        List<City> cities = new UptcList<City>();
         try {
             citiesTxt = this.loadFile();
             for (String string : citiesTxt) {
@@ -50,7 +51,7 @@ public class CityService {
 
 
     public City getCityByCodeDane(String codeDane) throws ProjectExeption {
-        List<String> citiesTxt = new ArrayList<String>();
+        List<String> citiesTxt = new UptcList<String>();
         try {
             citiesTxt = this.loadFile();
             for (String string : citiesTxt) {
@@ -71,9 +72,9 @@ public class CityService {
 
     }
 
-    public ArrayList<String> loadFile() throws IOException {
+    public UptcList<String> loadFile() throws IOException {
         Config config = new Config();
-        ArrayList<String> lines = new ArrayList<>();
+        UptcList<String> lines = new UptcList<>();
         try (BufferedReader buffer = new BufferedReader(new FileReader(config.getCityPath()));) {
             String line = "";
             while ((line = buffer.readLine()) != null) {
@@ -97,6 +98,48 @@ public class CityService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String deleteCity(String codeDane) throws ProjectExeption {
+        List<City> citiesTxt = new UptcList<>();
+        List<String> newCities = new UptcList<>();
+        String output = "No se ha eliminado nada";
+        try {
+            citiesTxt = this.getCities();
+            for (City city : citiesTxt) {
+                if (city.getCodeDane().equals(codeDane)) {
+                    if (!this.isCityAssignedPerson(codeDane)) {
+                        citiesTxt.remove(city);
+                        output = "Ciudad " + city + " eliminada";
+                    }else{
+                        newCities.add(makeStringFromCity(city));
+                    }
+                }else{
+                    newCities.add(makeStringFromCity(city));
+                }
+            }
+            this.saveFile(newCities);
+        } catch (Exception e) {
+            throw new ProjectExeption(TypeMessage.NOT_FOUND_FILE);
+        }
+        return output;
+
+    }
+
+    private boolean isCityAssignedPerson(String codeDane) {
+        PersonService personService = new PersonService();
+        List<Person> people = new UptcList<>();
+        try {
+            people = personService.getPeople();
+        } catch (ProjectExeption e) {
+            e.printStackTrace();
+        }
+        for (Person person : people) {
+            if (person.getCity().getCodeDane().equals(codeDane)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

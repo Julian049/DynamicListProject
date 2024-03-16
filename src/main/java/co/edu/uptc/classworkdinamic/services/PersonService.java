@@ -2,7 +2,6 @@ package co.edu.uptc.classworkdinamic.services;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,6 +10,7 @@ import co.edu.uptc.classworkdinamic.exeptions.TypeMessage;
 import co.edu.uptc.classworkdinamic.models.Person;
 import co.edu.uptc.classworkdinamic.utils.Config;
 import co.edu.uptc.classworkdinamic.utils.DateUtil;
+import co.edu.uptc.services.dynamic.UptcList;
 
 public class PersonService {
   
@@ -33,7 +33,7 @@ public class PersonService {
   }
 
   public List<Person> getOver18(List<Person> people) {
-    List<Person> peopleAux = new ArrayList<Person>();
+    List<Person> peopleAux = new UptcList<Person>();
     for (Person person : people) {
       if (DateUtil.getAge(person.getBirthDate()) >= 18) {
         peopleAux.add(person);
@@ -43,7 +43,7 @@ public class PersonService {
   }
 
   public List<Person> getPeopleGender(List<Person> people,String gender) {
-    List<Person> peopleAux = new ArrayList<Person>();
+    List<Person> peopleAux = new UptcList<Person>();
     for (Person person : people) {
       if (person.getGender().equals(gender)) {
         peopleAux.add(person);
@@ -53,7 +53,7 @@ public class PersonService {
   }
 
   public List<Person> getPeopleCityByName(List<Person> people,String nameCity) {
-    List<Person> peopleAux = new ArrayList<Person>();
+    List<Person> peopleAux = new UptcList<Person>();
     for (Person person : people) {
       if (person.getCity() != null && person.getCity().getName().equals(nameCity)) {
         peopleAux.add(person);
@@ -85,7 +85,7 @@ public class PersonService {
 
   public List<Person> getPeople() throws ProjectExeption{
     CityService cityService = new CityService();
-    List<Person> people = new ArrayList<Person>();
+    List<Person> people = new UptcList<Person>();
     try {
       List<String> pp = this.loadFile();
       for (String string : pp) {
@@ -107,9 +107,9 @@ public class PersonService {
     return people;
   }
 
-  public ArrayList<String> loadFile() throws IOException {
+  public UptcList<String> loadFile() throws IOException {
     Config config = new Config();
-    ArrayList<String> lines = new ArrayList<>();
+    UptcList<String> lines = new UptcList<>();
     try (BufferedReader buffer = new BufferedReader(new FileReader(config.getPeoplePath()));) {
       String line = "";
       while ((line = buffer.readLine()) != null) {
@@ -134,4 +134,6 @@ public class PersonService {
       e.printStackTrace();
     }
   }
+
+
 }
