@@ -15,20 +15,20 @@ import co.edu.uptc.services.dynamic.UptcList;
 public class PersonService {
   
 
-  public List<Person> orderName(List<Person> peopleAux) {
-    Collections.sort(peopleAux, ComparatorService.personNameComparator());
+  public List<Person> orderName(UptcList<Person> peopleAux) {
+    ComparatorService.bubbleNames(peopleAux);
     return peopleAux;
   }
 
 
-  public List<Person> orderLastName(List<Person> peopleAux) {
-    Collections.sort(peopleAux, ComparatorService.personLastNameComparator());
+  public List<Person> orderLastName(UptcList<Person> peopleAux) {
+    ComparatorService.bubbleLastNames(peopleAux);
     return peopleAux;
   }
 
   
-  public List<Person> orderAge(List<Person> peopleAux) {
-    Collections.sort(peopleAux, ComparatorService.personAgeComparator());
+  public List<Person> orderAge(UptcList<Person> peopleAux) {
+    ComparatorService.bubbleDates(peopleAux);
     return peopleAux;
   }
 

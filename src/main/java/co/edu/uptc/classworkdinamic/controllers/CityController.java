@@ -24,13 +24,10 @@ public class CityController {
         try {
             cities = service.getCities();
             return ResponseEntity.status(HttpStatus.OK).body(cities);
-                //CityDto.fromCities(cities));
         } catch (ProjectExeption e) {
             return ResponseEntity.status(e.getMenssage().getCodeHttp())
             .body(e.getMenssage());
         }
-
-        //return ResponseEntity.ok(CityDto.fromCities(cities));
     }
 
     @PostMapping()
@@ -45,10 +42,10 @@ public class CityController {
         }
     }
 
-    @GetMapping("/delete/{city}")
-    public ResponseEntity<Object> getDeleteCity(@PathVariable String city) {
+    @GetMapping("/delete/{codeDane}")
+    public ResponseEntity<Object> deleteCity(@PathVariable String codeDane) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(service.deleteCity(city));
+            return ResponseEntity.status(HttpStatus.OK).body(service.deleteCity(codeDane));
         } catch (ProjectExeption e) {
             return ResponseEntity.status(e.getMenssage().getCodeHttp()).body(e.getMenssage());
         }

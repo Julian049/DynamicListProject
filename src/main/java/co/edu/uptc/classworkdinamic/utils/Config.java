@@ -29,4 +29,13 @@ public class Config {
         return properties.getProperty("peoplePath");
     }
 
+    public String getCityNotDeleted() {
+        return properties.getProperty("cityNotDeleted");
+    }
+
+    public String getCityDeleted() {
+        return properties.getProperty("cityDeleted");
+    }
+
+
 }

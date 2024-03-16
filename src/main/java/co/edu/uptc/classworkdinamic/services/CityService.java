@@ -12,9 +12,9 @@ import co.edu.uptc.classworkdinamic.utils.Config;
 import co.edu.uptc.services.dynamic.UptcList;
 
 public class CityService {
-  
 
-    public List<City> getCities() throws ProjectExeption{
+
+    public List<City> getCities() throws ProjectExeption {
         List<String> citiesTxt = new UptcList<String>();
         List<City> cities = new UptcList<City>();
         try {
@@ -34,19 +34,19 @@ public class CityService {
     }
 
 
-  public void addcity(City city) throws ProjectExeption {
-    try {
-      List<String> pp = this.loadFile();
-        pp.add(makeStringFromCity(city));
-        this.saveFile(pp);
-    } catch (Exception e) {
-     throw new ProjectExeption(TypeMessage.NOT_FOUND_FILE);
+    public void addcity(City city) throws ProjectExeption {
+        try {
+            List<String> pp = this.loadFile();
+            pp.add(makeStringFromCity(city));
+            this.saveFile(pp);
+        } catch (Exception e) {
+            throw new ProjectExeption(TypeMessage.NOT_FOUND_FILE);
+        }
     }
-  }
 
-  
-  public String makeStringFromCity(City city) {
-    return city.getCodeDane() + "," + city.getName();
+
+    public String makeStringFromCity(City city) {
+        return city.getCodeDane() + "," + city.getName();
     }
 
 
@@ -64,15 +64,14 @@ public class CityService {
                 }
 
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new ProjectExeption(TypeMessage.NOT_FOUND_FILE);
         }
         return null;
 
     }
 
-    public UptcList<String> loadFile() throws IOException {
+    public UptcList<String> loadFile() {
         Config config = new Config();
         UptcList<String> lines = new UptcList<>();
         try (BufferedReader buffer = new BufferedReader(new FileReader(config.getCityPath()));) {
@@ -80,15 +79,13 @@ public class CityService {
             while ((line = buffer.readLine()) != null) {
                 lines.add(line);
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return lines;
     }
 
-    public void saveFile(List<String> lines) throws IOException {
+    public void saveFile(List<String> lines) {
         Config config = new Config();
         try (BufferedWriter buffer = new BufferedWriter(new FileWriter(config.getCityPath()))) {
             for (String line : lines) {
@@ -101,27 +98,23 @@ public class CityService {
     }
 
     public String deleteCity(String codeDane) throws ProjectExeption {
-        List<City> citiesTxt = new UptcList<>();
+        Config config = new Config();
+        List<City> citiesTxt = this.getCities();
         List<String> newCities = new UptcList<>();
-        String output = "No se ha eliminado nada";
-        try {
-            citiesTxt = this.getCities();
-            for (City city : citiesTxt) {
-                if (city.getCodeDane().equals(codeDane)) {
-                    if (!this.isCityAssignedPerson(codeDane)) {
-                        citiesTxt.remove(city);
-                        output = "Ciudad " + city + " eliminada";
-                    }else{
-                        newCities.add(makeStringFromCity(city));
-                    }
-                }else{
+        String output = config.getCityNotDeleted();
+        for (City city : citiesTxt) {
+            if (city.getCodeDane().equals(codeDane)) {
+                if (!this.isCityAssignedPerson(codeDane)) {
+                    citiesTxt.remove(city);
+                    output = config.getCityDeleted() + this.makeStringFromCity(city);
+                } else {
                     newCities.add(makeStringFromCity(city));
                 }
+            } else {
+                newCities.add(makeStringFromCity(city));
             }
-            this.saveFile(newCities);
-        } catch (Exception e) {
-            throw new ProjectExeption(TypeMessage.NOT_FOUND_FILE);
         }
+        this.saveFile(newCities);
         return output;
 
     }

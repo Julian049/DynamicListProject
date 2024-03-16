@@ -60,7 +60,7 @@
 			<artifactId>list</artifactId>
 			<version>2.0.0</version>
 			<scope>system</scope>
-			<systemPath>C:\Users\Julian\Documents\Universidad\Cuarto Semestre\Programacion III\finalLibrary17.jar</systemPath>
+			<systemPath>${project.basedir}/lib/finalLibrary17.jar</systemPath>
 		</dependency>
 
 	</dependencies>
