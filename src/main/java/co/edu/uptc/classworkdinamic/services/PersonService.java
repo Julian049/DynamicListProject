@@ -13,27 +13,27 @@ import co.edu.uptc.classworkdinamic.utils.DateUtil;
 import co.edu.uptc.services.dynamic.UptcList;
 
 public class PersonService {
-  
 
-  public List<Person> orderName(UptcList<Person> peopleAux) {
-    ComparatorService.bubbleNames(peopleAux);
+
+  public List<Person> orderName(List<Person> peopleAux) {
+    Collections.sort(peopleAux, ComparatorService.personNameComparator());
     return peopleAux;
   }
 
 
-  public List<Person> orderLastName(UptcList<Person> peopleAux) {
-    ComparatorService.bubbleLastNames(peopleAux);
+  public List<Person> orderLastName(List<Person> peopleAux) {
+    Collections.sort(peopleAux, ComparatorService.personLastNameComparator());
     return peopleAux;
   }
 
-  
-  public List<Person> orderAge(UptcList<Person> peopleAux) {
-    ComparatorService.bubbleDates(peopleAux);
+
+  public List<Person> orderAge(List<Person> peopleAux) {
+    Collections.sort(peopleAux, ComparatorService.personAgeComparator());
     return peopleAux;
   }
 
   public List<Person> getOver18(List<Person> people) {
-    List<Person> peopleAux = new UptcList<Person>();
+    List<Person> peopleAux = new UptcList<>();
     for (Person person : people) {
       if (DateUtil.getAge(person.getBirthDate()) >= 18) {
         peopleAux.add(person);
@@ -43,7 +43,7 @@ public class PersonService {
   }
 
   public List<Person> getPeopleGender(List<Person> people,String gender) {
-    List<Person> peopleAux = new UptcList<Person>();
+    List<Person> peopleAux = new UptcList<>();
     for (Person person : people) {
       if (person.getGender().equals(gender)) {
         peopleAux.add(person);
@@ -53,7 +53,7 @@ public class PersonService {
   }
 
   public List<Person> getPeopleCityByName(List<Person> people,String nameCity) {
-    List<Person> peopleAux = new UptcList<Person>();
+    List<Person> peopleAux = new UptcList<>();
     for (Person person : people) {
       if (person.getCity() != null && person.getCity().getName().equals(nameCity)) {
         peopleAux.add(person);
@@ -85,7 +85,7 @@ public class PersonService {
 
   public List<Person> getPeople() throws ProjectExeption{
     CityService cityService = new CityService();
-    List<Person> people = new UptcList<Person>();
+    List<Person> people = new UptcList<>();
     try {
       List<String> pp = this.loadFile();
       for (String string : pp) {
@@ -101,29 +101,26 @@ public class PersonService {
         people.add(person);
       }
     } catch (Exception e) {
-      e.printStackTrace();
       throw new ProjectExeption(TypeMessage.NOT_FOUND_FILE);
     }
     return people;
   }
 
-  public UptcList<String> loadFile() throws IOException {
+  public UptcList<String> loadFile() {
     Config config = new Config();
     UptcList<String> lines = new UptcList<>();
-    try (BufferedReader buffer = new BufferedReader(new FileReader(config.getPeoplePath()));) {
+    try (BufferedReader buffer = new BufferedReader(new FileReader(config.getPeoplePath()))) {
       String line = "";
       while ((line = buffer.readLine()) != null) {
         lines.add(line);
       }
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
     } catch (IOException e) {
       e.printStackTrace();
     }
     return lines;
   }
 
-  public void saveFile(List<String> lines) throws IOException {
+  public void saveFile(List<String> lines) {
     Config config = new Config();
     try (BufferedWriter buffer = new BufferedWriter(new FileWriter(config.getPeoplePath()))) {
       for (String line : lines) {

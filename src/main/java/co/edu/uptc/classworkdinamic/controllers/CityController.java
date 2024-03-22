@@ -2,8 +2,6 @@ package co.edu.uptc.classworkdinamic.controllers;
 
 import java.util.List;
 
-import co.edu.uptc.classworkdinamic.dtos.PersonDto;
-import co.edu.uptc.classworkdinamic.models.Person;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

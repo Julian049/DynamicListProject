@@ -1,6 +1,5 @@
 package co.edu.uptc.classworkdinamic.controllers;
 
-import co.edu.uptc.services.dynamic.UptcList;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.uptc.classworkdinamic.dtos.Person2Dto;
@@ -53,7 +52,7 @@ public class PersonController {
         List<Person> peopleAux;
         try {
             peopleAux = personService.getPeople();
-            List<Person> peopleOrder = personService.orderName((UptcList<Person>) peopleAux);
+            List<Person> peopleOrder = personService.orderName(peopleAux);
             return ResponseEntity.status(HttpStatus.OK).body(PersonDto.fromPeople(peopleOrder));
         } catch (ProjectExeption e) {
             return ResponseEntity.status(e.getMenssage().getCodeHttp()).body(e.getMenssage());
@@ -66,7 +65,7 @@ public class PersonController {
         try {
             List<Person> peopleAux = personService.getPeople();
             return ResponseEntity.status(HttpStatus.OK).body(PersonDto.fromPeople(
-                    personService.orderLastName((UptcList<Person>) peopleAux)));
+                    personService.orderLastName(peopleAux)));
         } catch (ProjectExeption e) {
             return ResponseEntity.status(e.getMenssage().getCodeHttp()).body(e.getMenssage());
         }
@@ -77,7 +76,7 @@ public class PersonController {
         List<Person> peopleAux;
         try {
             peopleAux = personService.getPeople();
-            return ResponseEntity.status(HttpStatus.OK).body(PersonDto.fromPeople(personService.orderAge((UptcList<Person>) peopleAux)));
+            return ResponseEntity.status(HttpStatus.OK).body(PersonDto.fromPeople(personService.orderAge(peopleAux)));
         } catch (ProjectExeption e) {
             return ResponseEntity.status(e.getMenssage().getCodeHttp()).body(e.getMenssage());
         }

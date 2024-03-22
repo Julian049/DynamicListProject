@@ -15,8 +15,8 @@ public class CityService {
 
 
     public List<City> getCities() throws ProjectExeption {
-        List<String> citiesTxt = new UptcList<String>();
-        List<City> cities = new UptcList<City>();
+        List<String> citiesTxt;
+        List<City> cities = new UptcList<>();
         try {
             citiesTxt = this.loadFile();
             for (String string : citiesTxt) {
@@ -51,7 +51,7 @@ public class CityService {
 
 
     public City getCityByCodeDane(String codeDane) throws ProjectExeption {
-        List<String> citiesTxt = new UptcList<String>();
+        List<String> citiesTxt;
         try {
             citiesTxt = this.loadFile();
             for (String string : citiesTxt) {
@@ -74,7 +74,7 @@ public class CityService {
     public UptcList<String> loadFile() {
         Config config = new Config();
         UptcList<String> lines = new UptcList<>();
-        try (BufferedReader buffer = new BufferedReader(new FileReader(config.getCityPath()));) {
+        try (BufferedReader buffer = new BufferedReader(new FileReader(config.getCityPath()))) {
             String line = "";
             while ((line = buffer.readLine()) != null) {
                 lines.add(line);

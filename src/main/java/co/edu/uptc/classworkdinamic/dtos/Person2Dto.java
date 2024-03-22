@@ -1,6 +1,5 @@
 package co.edu.uptc.classworkdinamic.dtos;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import co.edu.uptc.classworkdinamic.models.Person;
